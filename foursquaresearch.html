@@ -9,8 +9,7 @@
 
 <body>
 <div class="container">
-	<input name="city" id="inpcity" placeholder="city">
-	<button onClick="processurl()">click to get data</button><br>
+	<input name="city" id="inpcity" placeholder="city"><br>
 
 
 	  <form id="populateplaces">
@@ -21,7 +20,21 @@
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
+
+var typingTimer;  //timer identifier
+var doneTypingInterval = 2000;
+
+$('#inpcity').keyup(function(){
+    clearTimeout(typingTimer);
+    if ($('#inpcity').val()) {
+        typingTimer = setTimeout(processurl, doneTypingInterval);
+    }
+});
+
 function processurl(){
+
+			document.getElementById("populateplaces").innerHTML = "";
+
 	        var str = document.getElementById("inpcity").value;
             var str = str.replace(/ /g,"%20");
             var url = "https://api.foursquare.com/v2/venues/explore?near="+ str + "&q=fun&v=20150214&m=foursquare&client_secret=L1J2NHSD3UK4ZAHH2JRGUQXHMED41PH3YOCYAMJS1GYARFJE&client_id=OI0JUH3OU4C0GM20F1CTT40Y1R5TBRXWTHQPJJQD4PKFFKKX";
@@ -31,15 +44,11 @@ function processurl(){
 				
 
 				for(i=0; i<jsonresult.response.groups[0].items.length; i++){
-
-					
-
 					 $("#populateplaces").append(
 					 	'<span class="checkbox"><label><input type="checkbox" value="">' + 
 					 	jsonresult.response.groups[0].items[i].venue.name + 
 					 	'</label><label> Category:' + 
 					 	 jsonresult.response.groups[0].items[i].venue.categories[0].name +  
-					 	 
 					 	'</label></span> ' 
 					 	);
 					};
